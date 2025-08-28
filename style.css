@@ -131,19 +131,19 @@ button {
     margin-left: auto;
   }
 
-  /* hide nav by default on mobile */
+    /* hide nav by default on mobile */
   .nav {
     display: none;
     flex-direction: column;
     background: #fff;
     position: absolute;
-    top: 70px;   /* just below header */
+    top: 100%;   /* 👈 ensures it opens below header */
     right: 0;
     width: 100%;
     padding: 16px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
-
+  
   /* show nav when toggled */
   .nav.show {
     display: flex;
@@ -155,5 +155,13 @@ button {
   }
 }
 
+
 a { text-decoration: none }
 small { color: var(--muted) }
+
+.hamburger{
+    width: 35px;
+  height: 5px;
+  background-color: black;
+  margin: 6px 0;
+}
