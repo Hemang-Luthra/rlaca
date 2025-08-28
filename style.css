@@ -143,7 +143,7 @@ button {
     padding: 16px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
-  
+
   /* show nav when toggled */
   .nav.show {
     display: flex;
@@ -164,4 +164,24 @@ small { color: var(--muted) }
   height: 5px;
   background-color: black;
   margin: 6px 0;
+}
+
+/* Contact form responsive */
+form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 12px; /* less padding on mobile */
+  }
+
+  form {
+    width: 100%;   /* full width */
+  }
+
+  input, textarea, select, button {
+    width: 100%;   /* stretch fields to fit screen */
+  }
 }
