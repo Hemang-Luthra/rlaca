@@ -12,17 +12,21 @@ body {
   line-height: 1.5;
   margin: 0;
   color: #111;
+  background: #c7c7c7;  /* 👈 soft light gray background */
 }
+
 
 .container { max-width: 1100px; margin: 0 auto; padding: 20px }
 
 .header {
-  background: #fff;
+  background: #ffffff;
   border-bottom: 1px solid #e6e6e6;
   position: sticky;
   top: 0;
   z-index: 50;
+  box-shadow: 0 10px 15px rgba(0,0,0,0.35); /* 👈 subtle shadow */
 }
+
 
 .header .inner {
   display: flex;
@@ -50,32 +54,95 @@ body {
   font-weight: 600;
 }
 
-.cta {
-  background: var(--emerald);
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: 10px;
-  text-decoration: none;
+.hero {
+  background: linear-gradient(to right, #1a70b6, #5A9BD5); /* 👈 soft blue gradient */
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+  border-radius: 0 0 20px 20px; /* 👈 curved bottom */
+}
+.hero h1, .hero p {
+  color: white;
 }
 
-.hero { background: #fff; padding: 48px 20px }
 
 .grid { display: grid; gap: 20px }
 .grid-3 { grid-template-columns: repeat(3, 1fr) }
 
 .card {
-  background: #fff;
-  padding: 18px;
+  background: linear-gradient(to top, #cccccc, #ffffff);
+  padding: 20px;
   border-radius: 12px;
   border: 1px solid #eaeaea;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: transform 0.3s ease, background-position 0.4s ease;
+  background-size: 100% 200%;
+  background-position: bottom;
+}
+.card:hover {
+  transform: translateY(-6px);
+  background-position: top;
+}
+.card a {
+  display: inline-block;
+  margin-top: 8px;
+  font-weight: 600;
+  color: var(--emerald);
+  text-decoration: none;
+}
+.card a:hover {
+  text-decoration: underline;
 }
 
-.footer {
-  background: #fff;
-  border-top: 1px solid #e6e6e6;
-  padding: 24px;
-  margin-top: 40px;
+.flowchart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px; /* less top margin */
 }
+
+.step {
+  text-align: center;
+  max-width: 400px;
+  margin: 12px 0; /* reduced vertical spacing */
+}
+
+.circle {
+  width: 44px;
+  height: 44px;
+  background: var(--emerald);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px; /* slightly smaller */
+  margin: 0 auto 6px; /* less bottom spacing */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+}
+
+.arrow {
+  font-size: 18px;  /* smaller arrow */
+  color: var(--emerald);
+  margin: 4px 0;    /* tighter spacing */
+}
+
+
+.footer {
+  background: #111827; /* dark footer */
+  color: #f3f4f6;
+  border-top: none;
+  padding: 32px;
+  text-align: center;
+}
+.footer a {
+  color: #9ca3af;
+}
+.footer a:hover {
+  color: #fff;
+}
+
 
 .center { display: flex; align-items: center; justify-content: center }
 
@@ -88,14 +155,25 @@ input, textarea, select {
   font-size: 14px;
 }
 
-button {
-  background: var(--emerald);
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 0;
-  cursor: pointer;
+.btn, .cta, button {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: var(--emerald);       /* main theme color */
+  color: #fff !important;           /* 👈 always white text */
+  border-radius: 10px;              /* consistent rounded corners */
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* 👈 soft shadow */
+  transition: background 0.2s ease, transform 0.1s ease;
 }
+
+.btn:hover, .cta:hover, button:hover {
+  background: var(--emerald-dark);  /* darker theme on hover */
+  color: #fff !important;           /* stays white */
+  transform: translateY(-2px);      /* subtle lift */
+}
+
 
 .success {
   background: #ecfdf5;
@@ -174,3 +252,4 @@ small { color: var(--muted) }
     margin-top: 10px;
   }
 }
+
