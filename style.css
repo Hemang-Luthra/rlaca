@@ -165,3 +165,12 @@ small { color: var(--muted) }
   background-color: black;
   margin: 6px 0;
 }
+
+@media (max-width: 880px) {
+  .nav a.cta {
+    display: block;
+    width: 100%;
+    text-align: center;   /* centers the text */
+    margin-top: 10px;
+  }
+}
