@@ -61,12 +61,17 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-// FAQ accordion toggle with aria state
-document.querySelectorAll('.faq .faq-question').forEach(btn => {
-  btn.setAttribute('aria-expanded', 'false');
-  btn.addEventListener('click', () => {
-    const item = btn.closest('.faq-item');
-    const expanded = item.classList.toggle('active');
-    btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+// ===== FAQ Accordion JS =====
+const faqItems = document.querySelectorAll('.faq-item');
+
+faqItems.forEach(item => {
+  const question = item.querySelector('.faq-question');
+  question.addEventListener('click', () => {
+    // Collapse others if you want only one open at a time
+    faqItems.forEach(i => {
+      if(i !== item) i.classList.remove('active');
+    });
+
+    item.classList.toggle('active');
   });
 });
