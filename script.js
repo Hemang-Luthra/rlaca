@@ -75,3 +75,4 @@ faqItems.forEach(item => {
     item.classList.toggle('active');
   });
 });
+<script src='https://www.noupe.com/embed/019bd5d750497e49abdf62b9baa4a2371021.js'></script>
