@@ -1,147 +1,1539 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ruchi Luthra & Associates — Tax Consultancy</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/x-icon" href="rla logo.png">
-  <script src='https://www.noupe.com/embed/019bd5d750497e49abdf62b9baa4a2371021.js'></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ruchi Luthra & Associates — Tax Consultancy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="icon" type="image/x-icon" href="rla logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<style>
+  :root {
+    --ink: #0e0d0a;
+    --paper: #f7f4ee;
+    --gold: #b8922a;
+    --gold-light: #d4aa4a;
+    --gold-pale: #f5ecd6;
+    --charcoal: #2a2820;
+    --mid: #7a7568;
+    --line: rgba(184,146,42,0.2);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ──────────────── NOISE TEXTURE ──────────────── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* ──────────────── NAV ──────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px;
+    height: 72px;
+    background: rgba(247,244,238,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.08); }
+
+  .nav-brand {
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+    text-decoration: none; color: inherit;
+  }
+  .nav-emblem {
+    width: 36px; height: 36px;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  .nav-emblem span {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+  }
+  .nav-brand-text {
+    display: flex; flex-direction: column; line-height: 1;
+  }
+  .nav-brand-text .name {
+    font-family: var(--serif);
+    font-size: 15px; font-weight: 600;
+    color: var(--ink); letter-spacing: 0.3px;
+  }
+  .nav-brand-text .tagline {
+    font-family: var(--mono);
+    font-size: 9px; color: var(--mid);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 2px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 12.5px; font-weight: 500;
+    color: var(--mid); text-decoration: none;
+    padding: 6px 14px; border-radius: 4px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s, background 0.2s;
+    text-transform: uppercase;
+    font-family: var(--sans);
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); background: rgba(184,146,42,0.08); }
+  .nav-cta {
+    background: var(--ink) !important; color: var(--gold) !important;
+    border-radius: 4px !important; padding: 8px 18px !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--charcoal) !important; }
+
+  .nav-mobile-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .nav-mobile-toggle span { display: block; width: 22px; height: 1.5px; background: var(--ink); transition: 0.3s; }
+
+  /* ──────────────── PAGE SECTIONS ──────────────── */
+  .page { display: none; padding-top: 72px; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ──────────────── HERO ──────────────── */
+  .hero {
+    position: relative;
+    display: grid; grid-template-columns: 1fr 1fr;
+    min-height: calc(100vh - 72px);
+    overflow: hidden;
+  }
+
+  .hero-left {
+    padding: 80px 64px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    position: relative; z-index: 2;
+  }
+
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .hero-label::before {
+    content: ''; width: 32px; height: 1px; background: var(--gold);
+  }
+
+  .hero-h1 {
+    font-family: var(--serif);
+    font-size: clamp(48px, 5.5vw, 80px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+  }
+  .hero-h1 em { font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-size: 16px; font-weight: 300;
+    color: var(--mid); line-height: 1.75;
+    max-width: 440px;
+    margin-bottom: 48px;
+    opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+  }
+
+  .hero-actions {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
+  }
+
+  .btn-primary {
+    background: var(--ink); color: var(--gold);
+    font-family: var(--sans); font-size: 13px;
+    font-weight: 500; letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 14px 32px; border: none; border-radius: 3px;
+    cursor: pointer; transition: background 0.2s, transform 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--charcoal); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent; color: var(--ink);
+    font-family: var(--sans); font-size: 13px;
+    font-weight: 500; letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 13px 32px; border: 1px solid rgba(14,13,10,0.25); border-radius: 3px;
+    cursor: pointer; transition: border-color 0.2s, color 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-stats {
+    display: flex; gap: 48px; margin-top: 64px;
+    padding-top: 40px; border-top: 1px solid var(--line);
+    opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+  }
+  .stat-num {
+    font-family: var(--serif); font-size: 36px;
+    font-weight: 600; color: var(--ink);
+    line-height: 1;
+  }
+  .stat-num sup { font-size: 16px; color: var(--gold); }
+  .stat-label {
+    font-size: 11px; font-weight: 400;
+    color: var(--mid); letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  .hero-right {
+    position: relative;
+    background: var(--charcoal);
+    overflow: hidden;
+    opacity: 0; animation: fadeIn 1s 0.3s forwards;
+  }
+  .hero-right-inner {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 0; padding: 40px;
+  }
+  .hero-pattern {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        rgba(184,146,42,0.04) 0px,
+        rgba(184,146,42,0.04) 1px,
+        transparent 1px,
+        transparent 48px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        rgba(184,146,42,0.04) 0px,
+        rgba(184,146,42,0.04) 1px,
+        transparent 1px,
+        transparent 48px
+      );
+  }
+  .hero-card-float {
+    background: rgba(247,244,238,0.06);
+    border: 1px solid rgba(184,146,42,0.2);
+    border-radius: 8px;
+    padding: 28px 32px;
+    width: 100%; max-width: 340px;
+    backdrop-filter: blur(4px);
+    position: relative; z-index: 2;
+    margin-bottom: 16px;
+    transition: transform 0.3s;
+  }
+  .hero-card-float:hover { transform: translateY(-3px); }
+  .hcf-icon {
+    width: 40px; height: 40px;
+    background: rgba(184,146,42,0.15);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; margin-bottom: 14px;
+  }
+  .hcf-title {
+    font-family: var(--serif);
+    font-size: 18px; font-weight: 600;
+    color: var(--paper); margin-bottom: 6px;
+  }
+  .hcf-desc { font-size: 12.5px; color: rgba(247,244,238,0.55); line-height: 1.6; }
+
+  /* ──────────────── SECTION COMMON ──────────────── */
+  .section { padding: 96px 64px; }
+  .section-alt { background: var(--charcoal); color: var(--paper); }
+  .section-gold { background: var(--gold-pale); }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .section-label::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  .section-alt .section-label { color: var(--gold-light); }
+  .section-alt .section-label::before { background: var(--gold-light); }
+
+  .section-h2 {
+    font-family: var(--serif);
+    font-size: clamp(32px, 3.5vw, 52px);
+    font-weight: 300; line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .section-alt .section-h2 { color: var(--paper); }
+  .section-h2 em { font-style: italic; color: var(--gold); }
+  .section-alt .section-h2 em { color: var(--gold-light); }
+
+  .section-desc {
+    font-size: 15.5px; color: var(--mid);
+    max-width: 560px; line-height: 1.75;
+    margin-bottom: 56px;
+  }
+  .section-alt .section-desc { color: rgba(247,244,238,0.55); }
+
+  /* ──────────────── SERVICES GRID ──────────────── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .service-card {
+    background: var(--paper);
+    padding: 36px 32px;
+    transition: background 0.25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--gold);
+    transition: width 0.35s;
+  }
+  .service-card:hover { background: var(--gold-pale); }
+  .service-card:hover::after { width: 100%; }
+  .service-card:hover .sc-arrow { transform: translateX(4px); opacity: 1; }
+
+  .sc-num {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--gold); letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .sc-icon { font-size: 28px; margin-bottom: 16px; }
+  .sc-title {
+    font-family: var(--serif);
+    font-size: 22px; font-weight: 600;
+    color: var(--ink); margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .sc-desc { font-size: 13.5px; color: var(--mid); line-height: 1.7; }
+  .sc-arrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 20px;
+    font-size: 12px; font-weight: 500;
+    color: var(--gold); letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0; transition: opacity 0.25s, transform 0.25s;
+  }
+
+  /* ──────────────── PROCESS ──────────────── */
+  .process-track {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 0; position: relative;
+    margin-top: 16px;
+  }
+  .process-track::before {
+    content: '';
+    position: absolute;
+    top: 32px; left: 10%; right: 10%;
+    height: 1px; background: rgba(184,146,42,0.3);
+    z-index: 0;
+  }
+  .process-step {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; padding: 0 12px;
+    position: relative; z-index: 1;
+  }
+  .ps-num {
+    width: 64px; height: 64px;
+    background: var(--ink);
+    border: 3px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 22px; font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 24px;
+    position: relative;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .process-step:hover .ps-num { background: var(--gold); color: var(--ink); transform: scale(1.08); }
+  .ps-title {
+    font-family: var(--serif); font-size: 17px; font-weight: 600;
+    color: var(--paper); margin-bottom: 10px;
+  }
+  .ps-desc { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.65; }
+
+  /* ──────────────── WHY CHOOSE ──────────────── */
+  .why-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+  .why-card {
+    padding: 40px 32px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    background: var(--paper);
+  }
+  .why-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(184,146,42,0.12);
+  }
+  .wc-check {
+    width: 48px; height: 48px;
+    background: var(--gold-pale);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 20px;
+  }
+  .wc-title {
+    font-family: var(--serif); font-size: 21px; font-weight: 600;
+    color: var(--ink); margin-bottom: 10px;
+  }
+  .wc-desc { font-size: 14px; color: var(--mid); line-height: 1.7; }
+
+  /* ──────────────── RESOURCES ──────────────── */
+  .resources-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+  }
+  .resource-card {
+    background: rgba(247,244,238,0.04);
+    border: 1px solid rgba(184,146,42,0.15);
+    border-radius: 6px; padding: 32px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .resource-card:hover {
+    border-color: rgba(184,146,42,0.4);
+    background: rgba(184,146,42,0.05);
+  }
+  .rc-tag {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold-light);
+    margin-bottom: 14px;
+    padding: 4px 10px; border: 1px solid rgba(184,146,42,0.3);
+    display: inline-block; border-radius: 2px;
+  }
+  .rc-title {
+    font-family: var(--serif); font-size: 22px; font-weight: 600;
+    color: var(--paper); margin-bottom: 12px; line-height: 1.2;
+  }
+  .rc-desc { font-size: 13.5px; color: rgba(247,244,238,0.5); line-height: 1.7; }
+
+  /* ──────────────── TEAM ──────────────── */
+  .team-section {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: center;
+  }
+  .team-visual {
+    position: relative;
+    height: 480px;
+    background: var(--charcoal);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .team-visual-inner {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(184,146,42,0.04) 0px, rgba(184,146,42,0.04) 1px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(184,146,42,0.04) 0px, rgba(184,146,42,0.04) 1px, transparent 1px, transparent 40px);
+  }
+  .team-monogram {
+    font-family: var(--serif);
+    font-size: 96px; font-weight: 300;
+    color: rgba(184,146,42,0.15);
+    line-height: 1;
+  }
+  .team-badge {
+    background: rgba(184,146,42,0.1);
+    border: 1px solid rgba(184,146,42,0.25);
+    padding: 12px 24px; border-radius: 40px;
+    text-align: center;
+  }
+  .tb-name {
+    font-family: var(--serif); font-size: 22px;
+    font-weight: 600; color: var(--paper); margin-bottom: 4px;
+  }
+  .tb-role { font-size: 12px; color: rgba(247,244,238,0.5); letter-spacing: 0.5px; }
+
+  /* ──────────────── FAQs ──────────────── */
+  .faqs-list { max-width: 760px; }
+  .faq-item {
+    border-bottom: 1px solid var(--line);
+    padding: 24px 0;
+  }
+  .faq-q {
+    font-family: var(--serif); font-size: 19px; font-weight: 600;
+    color: var(--ink); cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; transition: color 0.2s;
+  }
+  .faq-q:hover { color: var(--gold); }
+  .faq-q svg { flex-shrink: 0; transition: transform 0.3s; }
+  .faq-q.open svg { transform: rotate(45deg); }
+  .faq-a {
+    font-size: 14.5px; color: var(--mid); line-height: 1.75;
+    max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.3s;
+    padding-top: 0;
+  }
+  .faq-a.open { max-height: 200px; padding-top: 14px; }
+
+  /* ──────────────── CONTACT ──────────────── */
+  .contact-layout {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px;
+  }
+  .contact-form-wrap h3 {
+    font-family: var(--serif); font-size: 28px; font-weight: 600;
+    margin-bottom: 8px; color: var(--ink);
+  }
+  .contact-form-wrap p { font-size: 14px; color: var(--mid); margin-bottom: 36px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+  .form-group { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+  .form-group label {
+    font-size: 11px; font-weight: 500; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--mid);
+    font-family: var(--mono);
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid rgba(14,13,10,0.15);
+    border-radius: 3px;
+    padding: 12px 14px;
+    font-family: var(--sans); font-size: 14px;
+    color: var(--ink);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(184,146,42,0.1);
+  }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-group select { cursor: pointer; }
+
+  .form-submit {
+    width: 100%;
+    background: var(--ink); color: var(--gold);
+    font-family: var(--sans); font-size: 13px;
+    font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+    padding: 15px 32px; border: none; border-radius: 3px;
+    cursor: pointer; transition: background 0.2s, transform 0.2s;
+    margin-top: 8px;
+  }
+  .form-submit:hover:not(:disabled) { background: var(--charcoal); transform: translateY(-1px); }
+  .form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .form-success {
+    display: none;
+    background: rgba(184,146,42,0.08);
+    border: 1px solid var(--gold);
+    border-radius: 4px; padding: 20px;
+    text-align: center; margin-top: 20px;
+  }
+  .form-success.show { display: block; }
+  .form-success p { color: var(--ink); font-size: 14px; }
+  .form-error {
+    display: none;
+    background: rgba(200,50,50,0.06);
+    border: 1px solid rgba(200,50,50,0.3);
+    border-radius: 4px; padding: 14px 16px;
+    font-size: 13px; color: #c83232; margin-top: 12px;
+  }
+  .form-error.show { display: block; }
+
+  .contact-info-card {
+    background: var(--charcoal);
+    border-radius: 6px; padding: 40px;
+    height: fit-content; position: sticky; top: 96px;
+  }
+  .ci-section { margin-bottom: 36px; }
+  .ci-section:last-child { margin-bottom: 0; }
+  .ci-label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold-light);
+    margin-bottom: 12px;
+  }
+  .ci-text {
+    font-size: 14px; color: rgba(247,244,238,0.7); line-height: 1.75;
+  }
+  .ci-text a { color: var(--gold-light); text-decoration: none; }
+  .ci-text a:hover { text-decoration: underline; }
+  .ci-phones { display: flex; flex-direction: column; gap: 6px; }
+  .ci-phone { font-size: 16px; color: var(--paper); font-weight: 500; }
+
+  /* ──────────────── FOOTER ──────────────── */
+  footer {
+    background: var(--ink); color: rgba(247,244,238,0.5);
+    padding: 56px 64px 32px;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px; padding-bottom: 48px;
+    border-bottom: 1px solid rgba(247,244,238,0.08);
+    margin-bottom: 32px;
+  }
+  .footer-brand .name {
+    font-family: var(--serif); font-size: 20px; font-weight: 600;
+    color: var(--paper); margin-bottom: 6px;
+  }
+  .footer-brand .sub {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .footer-brand p { font-size: 13px; line-height: 1.75; max-width: 300px; }
+  .footer-col h4 {
+    font-size: 11px; font-weight: 500; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .footer-col ul li a {
+    font-size: 13px; color: rgba(247,244,238,0.45);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--gold); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px;
+  }
+  .footer-bottom a { color: var(--gold); text-decoration: none; }
+
+  /* ──────────────── TOAST ──────────────── */
+  .toast {
+    position: fixed; bottom: 32px; right: 32px; z-index: 9000;
+    background: var(--ink); color: var(--paper);
+    padding: 16px 24px; border-radius: 6px;
+    border-left: 3px solid var(--gold);
+    font-size: 14px; max-width: 320px;
+    transform: translateY(80px); opacity: 0;
+    transition: transform 0.4s, opacity 0.4s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ──────────────── BANNER STRIP ──────────────── */
+  .ticker-strip {
+    background: var(--ink); overflow: hidden;
+    height: 40px; display: flex; align-items: center;
+    border-bottom: 1px solid rgba(184,146,42,0.2);
+  }
+  .ticker-inner {
+    display: flex; gap: 0;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    padding: 0 40px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(184,146,42,0.7);
+    display: flex; align-items: center; gap: 16px;
+  }
+  .ticker-item::after { content: '◆'; font-size: 6px; color: var(--gold); }
+
+  /* ──────────────── ANIMATIONS ──────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(184,146,42,0.4); }
+    70% { box-shadow: 0 0 0 12px rgba(184,146,42,0); }
+    100% { box-shadow: 0 0 0 0 rgba(184,146,42,0); }
+  }
+
+  /* ──────────────── MOBILE ──────────────── */
+  @media (max-width: 1100px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .process-track { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .process-track::before { display: none; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .team-section { grid-template-columns: 1fr; }
+    .contact-layout { grid-template-columns: 1fr; }
+    .contact-info-card { position: static; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .nav-mobile-toggle { display: flex; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: fixed; top: 72px; left: 0; right: 0;
+      background: rgba(247,244,238,0.97);
+      backdrop-filter: blur(16px);
+      padding: 16px 20px 24px;
+      gap: 4px;
+      border-bottom: 1px solid var(--line);
+    }
+    .section, .hero-left { padding: 56px 20px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .resources-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .process-track { grid-template-columns: 1fr; }
+    .hero-stats { flex-wrap: wrap; gap: 28px; }
+  }
+</style>
 </head>
 <body>
-  <header class="header">
-  <div class="inner container">
-    <div class="brand">
-      <img src="logo.png" alt="Ruchi Luthra & Associates Logo" class="logo" />
+
+<!-- TICKER -->
+<div class="ticker-strip">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">ITR Filing AY 2025–26</span>
+    <span class="ticker-item">GST Returns Due</span>
+    <span class="ticker-item">Tax Advisory Services</span>
+    <span class="ticker-item">Company Incorporation</span>
+    <span class="ticker-item">TDS/Payroll Compliance</span>
+    <span class="ticker-item">Capital Gains Planning</span>
+    <span class="ticker-item">NRI Tax Returns</span>
+    <span class="ticker-item">ITR Filing AY 2025–26</span>
+    <span class="ticker-item">GST Returns Due</span>
+    <span class="ticker-item">Tax Advisory Services</span>
+    <span class="ticker-item">Company Incorporation</span>
+    <span class="ticker-item">TDS/Payroll Compliance</span>
+    <span class="ticker-item">Capital Gains Planning</span>
+    <span class="ticker-item">NRI Tax Returns</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-brand" href="#" onclick="showPage('home')">
+    <div class="nav-emblem"><span>RL</span></div>
+    <div class="nav-brand-text">
+      <span class="name">Ruchi Luthra & Associates</span>
+      <span class="tagline">Tax Consultancy · Compliances · Advisory</span>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" onclick="showPage('home')" class="active" data-page="home">Home</a></li>
+    <li><a href="#" onclick="showPage('services')" data-page="services">Services</a></li>
+    <li><a href="#" onclick="showPage('process')" data-page="process">Process</a></li>
+    <li><a href="#" onclick="showPage('team')" data-page="team">Team</a></li>
+    <li><a href="#" onclick="showPage('resources')" data-page="resources">Resources</a></li>
+    <li><a href="#" onclick="showPage('faqs')" data-page="faqs">FAQs</a></li>
+    <li><a href="#" onclick="showPage('contact')" class="nav-cta" data-page="contact">Contact Us</a></li>
+  </ul>
+  <div class="nav-mobile-toggle" id="mobileToggle">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- HOME PAGE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-label">Chartered Tax Consultancy · Est. New Delhi</div>
+      <h1 class="hero-h1">Trusted Tax Counsel<br/>for <em>Your Growth</em></h1>
+      <p class="hero-sub">We simplify tax, compliance, and advisory so you can focus on building your business. Precise filings. Strategic guidance. Year-round support.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('contact')">Book Free Consultation</button>
+        <button class="btn-secondary" onclick="showPage('services')">Explore Services</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">500<sup>+</sup></div>
+          <div class="stat-label">Clients Served</div>
+        </div>
+        <div>
+          <div class="stat-num">10<sup>+</sup></div>
+          <div class="stat-label">Years of Expertise</div>
+        </div>
+        <div>
+          <div class="stat-num">100<sup>%</sup></div>
+          <div class="stat-label">Compliance Rate</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-pattern"></div>
+      <div class="hero-right-inner">
+        <div class="hero-card-float">
+          <div class="hcf-icon">📋</div>
+          <div class="hcf-title">Income Tax Filing</div>
+          <div class="hcf-desc">Quick and accurate ITR filing for individuals, businesses and NRIs.</div>
+        </div>
+        <div class="hero-card-float">
+          <div class="hcf-icon">📊</div>
+          <div class="hcf-title">GST Compliance</div>
+          <div class="hcf-desc">Timely return filing, reconciliation and GST notice handling.</div>
+        </div>
+        <div class="hero-card-float">
+          <div class="hcf-icon">💼</div>
+          <div class="hcf-title">Business Advisory</div>
+          <div class="hcf-desc">Strategic tax planning, regime selection and ESOP advisory.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR SERVICES STRIP -->
+  <section class="section">
+    <div class="section-label">Our Services</div>
+    <h2 class="section-h2">End-to-end <em>tax solutions</em><br/>under one roof</h2>
+    <p class="section-desc">From individual ITR filings to corporate GST audits, we handle it all with precision and care.</p>
+    <div class="services-grid">
+      <div class="service-card" onclick="showPage('services')">
+        <div class="sc-num">01</div>
+        <div class="sc-icon">📄</div>
+        <div class="sc-title">Income Tax Filing</div>
+        <div class="sc-desc">Form 16, business ITRs, NRI returns and notice handling with accuracy.</div>
+        <div class="sc-arrow">Explore &#8594;</div>
+      </div>
+      <div class="service-card" onclick="showPage('services')">
+        <div class="sc-num">02</div>
+        <div class="sc-icon">🧾</div>
+        <div class="sc-title">GST Compliance</div>
+        <div class="sc-desc">Registration, returns, audits, reconciliations and GST strategy.</div>
+        <div class="sc-arrow">Explore &#8594;</div>
+      </div>
+      <div class="service-card" onclick="showPage('services')">
+        <div class="sc-num">03</div>
+        <div class="sc-icon">🏢</div>
+        <div class="sc-title">Incorporation</div>
+        <div class="sc-desc">Pvt Ltd, LLP, OPC and post-incorporation ROC and NGO compliance.</div>
+        <div class="sc-arrow">Explore &#8594;</div>
+      </div>
+      <div class="service-card" onclick="showPage('services')">
+        <div class="sc-num">04</div>
+        <div class="sc-icon">📐</div>
+        <div class="sc-title">Tax Advisory</div>
+        <div class="sc-desc">Regime selection, capital gains planning, ESOPs and NRI advisory.</div>
+        <div class="sc-arrow">Explore &#8594;</div>
+      </div>
+      <div class="service-card" onclick="showPage('services')">
+        <div class="sc-num">05</div>
+        <div class="sc-icon">✅</div>
+        <div class="sc-title">Compliances</div>
+        <div class="sc-desc">GST, Income Tax, ROC and all statutory compliances managed for you.</div>
+        <div class="sc-arrow">Explore &#8594;</div>
+      </div>
+      <div class="service-card" onclick="showPage('services')">
+        <div class="sc-num">06</div>
+        <div class="sc-icon">⚖️</div>
+        <div class="sc-title">Audits & Representation</div>
+        <div class="sc-desc">Tax audit support, notice responses and assessment representations.</div>
+        <div class="sc-arrow">Explore &#8594;</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="section section-gold">
+    <div class="section-label">Why Choose Us</div>
+    <h2 class="section-h2">Built on trust,<br/>driven by <em>expertise</em></h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="wc-check">✔</div>
+        <div class="wc-title">Experienced Team</div>
+        <div class="wc-desc">Years of deep expertise in direct and indirect tax consultancy, compliance handling, and advisory across all sectors.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-check">₹</div>
+        <div class="wc-title">Affordable Pricing</div>
+        <div class="wc-desc">Transparent and cost-effective solutions tailored for individuals, startups and growing businesses — no hidden fees.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-check">🤝</div>
+        <div class="wc-title">Reliable Support</div>
+        <div class="wc-desc">We stay connected year-round for queries, notices, and proactive updates — you're never navigating compliance alone.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESOURCES PREVIEW -->
+  <section class="section">
+    <div class="section-label">Resources & Guides</div>
+    <h2 class="section-h2">Know your <em>taxes</em>,<br/>make smarter decisions</h2>
+    <p class="section-desc">Practical guides to help you understand tax rules, deadlines, and planning strategies.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:40px;">
+      <div class="why-card" style="cursor:pointer;" onclick="showPage('resources')">
+        <div style="font-size:28px;margin-bottom:16px;">📋</div>
+        <div class="wc-title">ITR Documents Checklist</div>
+        <div class="wc-desc">A quick guide to filing ITR in AY 2025–26 with all required documents listed.</div>
+      </div>
+      <div class="why-card" style="cursor:pointer;" onclick="showPage('resources')">
+        <div style="font-size:28px;margin-bottom:16px;">📅</div>
+        <div class="wc-title">GST Deadlines</div>
+        <div class="wc-desc">Important GST due dates and penalty rules explained simply for all taxpayers.</div>
+      </div>
+      <div class="why-card" style="cursor:pointer;" onclick="showPage('resources')">
+        <div style="font-size:28px;margin-bottom:16px;">📈</div>
+        <div class="wc-title">Capital Gains Simplified</div>
+        <div class="wc-desc">Understand capital gains tax on stocks, mutual funds and property transactions.</div>
+      </div>
+    </div>
+    <button class="btn-secondary" onclick="showPage('resources')">See All Resources</button>
+  </section>
+
+  <!-- CTA STRIP -->
+  <section style="background:var(--ink);padding:64px;text-align:center;">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;">Get Started Today</div>
+    <h2 style="font-family:var(--serif);font-size:clamp(32px,4vw,52px);font-weight:300;color:var(--paper);margin-bottom:16px;">Ready to simplify your <em style="color:var(--gold-light);font-style:italic;">taxes</em>?</h2>
+    <p style="font-size:15px;color:rgba(247,244,238,0.5);margin-bottom:40px;max-width:480px;margin-left:auto;margin-right:auto;">Book a free 15-minute consultation with our experts. No obligation, just clarity.</p>
+    <button class="btn-primary" onclick="showPage('contact')" style="font-size:14px;padding:16px 40px;">Book Free Consultation</button>
+  </section>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SERVICES PAGE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-services">
+  <section class="section" style="padding-bottom:0;">
+    <div class="section-label">What We Do</div>
+    <h1 class="section-h2">Our <em>Services</em></h1>
+    <p class="section-desc">Comprehensive tax and compliance solutions for every stage of your financial journey.</p>
+  </section>
+
+  <section class="section" style="padding-top:48px;">
+    <div style="display:grid;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);">
+        <div style="background:var(--paper);padding:48px 40px;">
+          <div class="sc-num">01</div>
+          <div style="font-size:36px;margin-bottom:16px;">📄</div>
+          <h3 style="font-family:var(--serif);font-size:26px;font-weight:600;color:var(--ink);margin-bottom:14px;">ITR Filing</h3>
+          <p style="font-size:14.5px;color:var(--mid);line-height:1.75;margin-bottom:20px;">
+            We handle all types of Income Tax Returns — from salaried individuals with Form 16 to complex business ITRs. Services include NRI returns, capital gains reporting, and responding to income tax notices and assessments.
+          </p>
+          <ul style="font-size:13.5px;color:var(--mid);line-height:2;list-style:none;">
+            <li>&#8594; Salaried Individual Returns (Form 16)</li>
+            <li>&#8594; Business & Professional ITRs</li>
+            <li>&#8594; NRI Income Tax Returns</li>
+            <li>&#8594; Notice Handling & Assessment</li>
+          </ul>
+        </div>
+        <div style="background:var(--paper);padding:48px 40px;">
+          <div class="sc-num">02</div>
+          <div style="font-size:36px;margin-bottom:16px;">🧾</div>
+          <h3 style="font-family:var(--serif);font-size:26px;font-weight:600;color:var(--ink);margin-bottom:14px;">GST</h3>
+          <p style="font-size:14.5px;color:var(--mid);line-height:1.75;margin-bottom:20px;">
+            Complete GST lifecycle management — from registration and return filing to audits, reconciliations, and strategic GST planning to optimize your tax position.
+          </p>
+          <ul style="font-size:13.5px;color:var(--mid);line-height:2;list-style:none;">
+            <li>&#8594; GST Registration</li>
+            <li>&#8594; Monthly / Quarterly Returns</li>
+            <li>&#8594; GST Audits & Reconciliation</li>
+            <li>&#8594; GST Notice Response</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);">
+        <div style="background:var(--paper);padding:48px 40px;">
+          <div class="sc-num">03</div>
+          <div style="font-size:36px;margin-bottom:16px;">✅</div>
+          <h3 style="font-family:var(--serif);font-size:26px;font-weight:600;color:var(--ink);margin-bottom:14px;">Compliances</h3>
+          <p style="font-size:14.5px;color:var(--mid);line-height:1.75;margin-bottom:20px;">
+            Holistic compliance management covering GST, Income Tax, ROC filings and all other statutory obligations — ensuring you are always on the right side of the law.
+          </p>
+          <ul style="font-size:13.5px;color:var(--mid);line-height:2;list-style:none;">
+            <li>&#8594; GST & Income Tax Compliances</li>
+            <li>&#8594; TDS / TCS Management</li>
+            <li>&#8594; ROC Annual Filings</li>
+            <li>&#8594; Payroll Processing</li>
+          </ul>
+        </div>
+        <div style="background:var(--paper);padding:48px 40px;">
+          <div class="sc-num">04</div>
+          <div style="font-size:36px;margin-bottom:16px;">🏢</div>
+          <h3 style="font-family:var(--serif);font-size:26px;font-weight:600;color:var(--ink);margin-bottom:14px;">Company Incorporation & NGOs</h3>
+          <p style="font-size:14.5px;color:var(--mid);line-height:1.75;margin-bottom:20px;">
+            End-to-end support for setting up your business entity — Private Limited, LLP, OPC — and ongoing post-incorporation ROC compliance and NGO registrations.
+          </p>
+          <ul style="font-size:13.5px;color:var(--mid);line-height:2;list-style:none;">
+            <li>&#8594; Pvt Ltd / LLP / OPC Incorporation</li>
+            <li>&#8594; Post-Incorporation ROC</li>
+            <li>&#8594; NGO / Section 8 Registration</li>
+            <li>&#8594; Business Restructuring</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);">
+        <div style="background:var(--paper);padding:48px 40px;">
+          <div class="sc-num">05</div>
+          <div style="font-size:36px;margin-bottom:16px;">📐</div>
+          <h3 style="font-family:var(--serif);font-size:26px;font-weight:600;color:var(--ink);margin-bottom:14px;">Tax Advisory</h3>
+          <p style="font-size:14.5px;color:var(--mid);line-height:1.75;margin-bottom:20px;">
+            Strategic advisory to minimise your tax liability legally — tax regime selection, capital gains planning, ESOP structuring, and comprehensive NRI advisory services.
+          </p>
+          <ul style="font-size:13.5px;color:var(--mid);line-height:2;list-style:none;">
+            <li>&#8594; Old vs New Tax Regime Analysis</li>
+            <li>&#8594; Capital Gains Planning</li>
+            <li>&#8594; ESOP Tax Advisory</li>
+            <li>&#8594; NRI Financial Planning</li>
+          </ul>
+        </div>
+        <div style="background:var(--paper);padding:48px 40px;">
+          <div class="sc-num">06</div>
+          <div style="font-size:36px;margin-bottom:16px;">⚖️</div>
+          <h3 style="font-family:var(--serif);font-size:26px;font-weight:600;color:var(--ink);margin-bottom:14px;">Audits & Representation</h3>
+          <p style="font-size:14.5px;color:var(--mid);line-height:1.75;margin-bottom:20px;">
+            Expert support for tax audits under various provisions, representation before Income Tax and GST authorities, and handling scrutiny assessments and appellate proceedings.
+          </p>
+          <ul style="font-size:13.5px;color:var(--mid);line-height:2;list-style:none;">
+            <li>&#8594; Tax Audit (Sec 44AB) Support</li>
+            <li>&#8594; Scrutiny Assessment Handling</li>
+            <li>&#8594; GST / Income Tax Notices</li>
+            <li>&#8594; Appellate Representation</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="background:var(--charcoal);padding:56px 64px;text-align:center;">
+    <h3 style="font-family:var(--serif);font-size:32px;font-weight:300;color:var(--paper);margin-bottom:12px;">Not sure which service you need?</h3>
+    <p style="font-size:14px;color:rgba(247,244,238,0.5);margin-bottom:32px;">Book a free 15-minute call and we'll guide you.</p>
+    <button class="btn-primary" onclick="showPage('contact')">Talk to an Expert</button>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PROCESS PAGE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-process">
+  <section class="section section-alt">
+    <div class="section-label">How We Work</div>
+    <h1 class="section-h2">Our <em>Process</em></h1>
+    <p class="section-desc" style="color:rgba(247,244,238,0.55);">A clear, structured approach that keeps you informed and in control at every step.</p>
+    <div class="process-track">
+      <div class="process-step">
+        <div class="ps-num">1</div>
+        <div class="ps-title">Initial Consultation</div>
+        <div class="ps-desc">We understand your requirements, situation and goals, and explain the best possible solutions tailored for you.</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">2</div>
+        <div class="ps-title">Document Collection</div>
+        <div class="ps-desc">You provide the necessary financial documents, compliance records and relevant information through our secure process.</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">3</div>
+        <div class="ps-title">Analysis & Advisory</div>
+        <div class="ps-desc">We review all documents thoroughly and provide tailored tax advice, identifying opportunities and risks.</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">4</div>
+        <div class="ps-title">Filing & Compliance</div>
+        <div class="ps-desc">We ensure accurate, timely filing and full compliance with all regulatory requirements — zero errors guaranteed.</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">5</div>
+        <div class="ps-title">Ongoing Support</div>
+        <div class="ps-desc">We stay available year-round for any queries, notices, updates or advisory needs that arise after filing.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
       <div>
-        <div style="font-weight:700">RUCHI LUTHRA & ASSOCIATES</div>
-        <small>Tax Consultancy • Compliances • Advisory</small>
+        <div class="section-label">Our Commitment</div>
+        <h2 class="section-h2">Precision at<br/>every <em>step</em></h2>
+        <p style="font-size:14.5px;color:var(--mid);line-height:1.8;margin-bottom:24px;">
+          We believe tax compliance should be stress-free. Our structured process ensures nothing falls through the cracks — from the first consultation to the final filing and beyond.
+        </p>
+        <p style="font-size:14.5px;color:var(--mid);line-height:1.8;">
+          Every client gets dedicated attention. We don't just file returns — we advise, plan, and protect your financial interests throughout the year.
+        </p>
+      </div>
+      <div>
+        <div style="background:var(--charcoal);border-radius:6px;padding:40px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;">Our Promises</div>
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="display:flex;gap:16px;align-items:flex-start;">
+              <div style="width:28px;height:28px;background:rgba(184,146,42,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;">✔</div>
+              <div>
+                <div style="font-family:var(--serif);font-size:16px;color:var(--paper);margin-bottom:4px;">100% Accuracy</div>
+                <div style="font-size:12.5px;color:rgba(247,244,238,0.5);">Every filing reviewed for accuracy before submission.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:16px;align-items:flex-start;">
+              <div style="width:28px;height:28px;background:rgba(184,146,42,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;">⏰</div>
+              <div>
+                <div style="font-family:var(--serif);font-size:16px;color:var(--paper);margin-bottom:4px;">Always On Time</div>
+                <div style="font-size:12.5px;color:rgba(247,244,238,0.5);">Never miss a deadline with our proactive tracking system.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:16px;align-items:flex-start;">
+              <div style="width:28px;height:28px;background:rgba(184,146,42,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;">🔒</div>
+              <div>
+                <div style="font-family:var(--serif);font-size:16px;color:var(--paper);margin-bottom:4px;">Full Confidentiality</div>
+                <div style="font-size:12.5px;color:rgba(247,244,238,0.5);">Your financial data is handled with strict confidentiality.</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+  </section>
+</div>
 
-    <!-- 👇 Added hamburger button -->
-    <button class="menu-toggle" aria-label="Toggle Menu"><div class="hamburger"></div>
-    <div class="hamburger"></div>
-    <div class="hamburger"></div></button>
+<!-- ═══════════════════════════════════════════ -->
+<!-- TEAM PAGE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-team">
+  <section class="section">
+    <div class="section-label">Our People</div>
+    <h1 class="section-h2">Meet the <em>Team</em></h1>
+    <p class="section-desc">Expert professionals dedicated to your financial success.</p>
+    <div class="team-section">
+      <div class="team-visual">
+        <div class="team-visual-inner">
+          <div class="team-monogram">GL</div>
+          <div class="team-badge">
+            <div class="tb-name">Girish Luthra</div>
+            <div class="tb-role">Principal Consultant</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Principal Consultant</div>
+        <h2 style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--ink);margin-bottom:20px;">Girish<br/><em style="color:var(--gold)">Luthra</em></h2>
+        <p style="font-size:15px;font-weight:500;color:var(--ink);margin-bottom:12px;">Direct & Indirect Tax</p>
+        <p style="font-size:14.5px;color:var(--mid);line-height:1.8;margin-bottom:24px;">
+          Girish Luthra brings years of deep expertise in both Direct and Indirect Taxation, guiding individuals, startups and corporations through the complexities of Indian tax law.
+        </p>
+        <p style="font-size:14.5px;color:var(--mid);line-height:1.8;margin-bottom:32px;">
+          With a thorough command over Income Tax, GST, corporate compliance, and strategic advisory, he ensures clients receive accurate, actionable, and value-driven guidance at every turn.
+        </p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <div style="padding:10px 20px;border:1px solid var(--line);border-radius:3px;font-size:12px;color:var(--mid);">Income Tax</div>
+          <div style="padding:10px 20px;border:1px solid var(--line);border-radius:3px;font-size:12px;color:var(--mid);">GST</div>
+          <div style="padding:10px 20px;border:1px solid var(--line);border-radius:3px;font-size:12px;color:var(--mid);">Corporate Compliance</div>
+          <div style="padding:10px 20px;border:1px solid var(--line);border-radius:3px;font-size:12px;color:var(--mid);">Tax Advisory</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="services.html">Services</a>
-      <a href="process.html">Process</a>
-      <a href="team.html">Team</a>
-      <a href="resources.html">Resources</a>
-      <a href="faqs.html">FAQs</a>
-      <a href="contact.html" class="cta">Contact</a>
-    </nav>
+  <section class="section section-gold">
+    <div style="text-align:center;max-width:600px;margin:0 auto;">
+      <div class="section-label" style="justify-content:center;">Behind the Name</div>
+      <h2 class="section-h2" style="text-align:center;">Ruchi Luthra &<br/><em>Associates</em></h2>
+      <p style="font-size:15px;color:var(--mid);line-height:1.8;">
+        Founded in New Delhi, Ruchi Luthra & Associates has grown into a trusted name for tax consultancy and compliance across India. We combine the personal attention of a boutique firm with the depth of knowledge of a seasoned practice — serving individuals, startups, and businesses with equal dedication.
+      </p>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- RESOURCES PAGE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-resources">
+  <section class="section section-alt">
+    <div class="section-label">Knowledge Hub</div>
+    <h1 class="section-h2">Resources <em>&</em> Guides</h1>
+    <p class="section-desc">Practical tax knowledge to help you plan, comply, and save.</p>
+    <div class="resources-grid">
+      <div class="resource-card">
+        <div class="rc-tag">Checklist · AY 2025-26</div>
+        <div class="rc-title">ITR Documents Checklist</div>
+        <div class="rc-desc">A comprehensive checklist of documents required for filing your Income Tax Return this year — PAN, Aadhaar, Form 16, bank statements, investment proofs, and more.</div>
+        <div style="margin-top:20px;font-size:12px;font-weight:500;letter-spacing:0.5px;color:var(--gold-light);text-transform:uppercase;cursor:pointer;" onclick="showPage('contact')">Request Full Guide →</div>
+      </div>
+      <div class="resource-card">
+        <div class="rc-tag">Compliance · GST</div>
+        <div class="rc-title">GST Due Dates & Penalties Explained</div>
+        <div class="rc-desc">Understand the important GST return deadlines, late filing fees, interest on delayed payments, and how to avoid penalties with timely compliance.</div>
+        <div style="margin-top:20px;font-size:12px;font-weight:500;letter-spacing:0.5px;color:var(--gold-light);text-transform:uppercase;cursor:pointer;" onclick="showPage('contact')">Request Full Guide →</div>
+      </div>
+      <div class="resource-card">
+        <div class="rc-tag">Advisory · Tax Planning</div>
+        <div class="rc-title">Which Tax Regime Should You Pick?</div>
+        <div class="rc-desc">A clear comparison of the Old vs New Tax Regimes — deductions, exemptions, slab rates, and a simple framework to choose what's best for your income profile.</div>
+        <div style="margin-top:20px;font-size:12px;font-weight:500;letter-spacing:0.5px;color:var(--gold-light);text-transform:uppercase;cursor:pointer;" onclick="showPage('contact')">Request Full Guide →</div>
+      </div>
+      <div class="resource-card">
+        <div class="rc-tag">Investment · Capital Gains</div>
+        <div class="rc-title">Capital Gains on Shares & Property</div>
+        <div class="rc-desc">How short-term and long-term capital gains tax applies to equity investments, mutual funds and real estate — including indexation benefits and exemptions available.</div>
+        <div style="margin-top:20px;font-size:12px;font-weight:500;letter-spacing:0.5px;color:var(--gold-light);text-transform:uppercase;cursor:pointer;" onclick="showPage('contact')">Request Full Guide →</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div style="text-align:center;max-width:560px;margin:0 auto;">
+      <div class="section-label" style="justify-content:center;">Need Specific Advice?</div>
+      <h2 class="section-h2" style="text-align:center;">Still have <em>questions</em>?</h2>
+      <p style="font-size:15px;color:var(--mid);line-height:1.75;margin-bottom:32px;">Our experts are ready to walk you through any tax or compliance question you have.</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="showPage('contact')">Book a Consultation</button>
+        <button class="btn-secondary" onclick="showPage('faqs')">Read FAQs</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FAQs PAGE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-faqs">
+  <section class="section">
+    <div class="section-label">Common Questions</div>
+    <h1 class="section-h2">Frequently Asked <em>Questions</em></h1>
+    <p class="section-desc">Everything you need to know about our services and processes.</p>
+    <div class="faqs-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Who needs to file an Income Tax Return?
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="faq-a">Any individual whose income exceeds the basic exemption limit, or who wishes to claim a refund, must file their return. Additionally, filing is mandatory for certain categories regardless of income — such as those holding foreign assets, making high-value transactions, or depositing above specified thresholds.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What documents are required for ITR filing?
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="faq-a">The key documents include: PAN card, Aadhaar card, Form 16 (from employer), bank account statements, investment proofs (80C, 80D, etc.), details of any other income (rental, capital gains, etc.), and TDS certificates. Our team will provide you a complete checklist specific to your case.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How do you help with GST compliance?
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="faq-a">We assist with timely GST return filing (GSTR-1, GSTR-3B, annual returns), error checks and reconciliations, input tax credit optimization, responding to GST notices, and strategic advice to ensure you're always compliant and minimising your GST liability.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do you provide ongoing tax advisory?
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="faq-a">Yes, we provide year-round advisory services. Our team stays connected with you for queries, important deadlines, notices received, and proactive tax planning — so you're never caught off guard.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Can you help with notices received from Income Tax or GST?
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="faq-a">Absolutely. Receiving a notice can be stressful, but it's often manageable with the right expertise. We handle all types of income tax and GST notices — scrutiny assessments, demand notices, refund adjustments — and represent you before the authorities.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How do I get started or book a consultation?
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="faq-a">Simply fill out the contact form on our Contact page, or call us directly on +91-9899064815 or +91-9953587040. We offer a free 15-minute initial consultation to understand your needs and recommend the right services.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do you serve NRIs and businesses outside Delhi?
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="faq-a">Yes. While we are based in New Delhi, we serve clients across India and NRIs worldwide through digital document submission and online consultations. Tax filing and advisory is entirely possible remotely with our streamlined process.</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--gold-pale);padding:56px 64px;text-align:center;">
+    <h3 style="font-family:var(--serif);font-size:28px;font-weight:300;color:var(--ink);margin-bottom:12px;">Still have a question?</h3>
+    <p style="font-size:14px;color:var(--mid);margin-bottom:28px;">Reach out directly and our team will respond within one business day.</p>
+    <button class="btn-primary" onclick="showPage('contact')">Send Us a Message</button>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTACT PAGE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <section class="section">
+    <div class="section-label">Get in Touch</div>
+    <h1 class="section-h2">Let's talk about<br/>your <em>taxes</em></h1>
+    <p class="section-desc">Book a free 15-minute consultation or send us your query. We respond within one business day.</p>
+
+    <div class="contact-layout">
+      <!-- FORM -->
+      <div class="contact-form-wrap">
+        <h3>Send a Message</h3>
+        <p>Fill in the details below and we'll get back to you promptly.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="cf-name" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="cf-email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="cf-phone" placeholder="+91 98XXX XXXXX" />
+          </div>
+          <div class="form-group">
+            <label>Service Interested In</label>
+            <select id="cf-service">
+              <option value="">Select a service...</option>
+              <option>ITR Filing</option>
+              <option>GST Compliance</option>
+              <option>TDS / Payroll</option>
+              <option>Company Incorporation</option>
+              <option>Tax Advisory</option>
+              <option>Audits & Representation</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Your Message</label>
+          <textarea id="cf-message" placeholder="Tell us about your requirement or ask a question..."></textarea>
+        </div>
+        <button class="form-submit" id="cf-submit" onclick="submitContactForm()">Send Message</button>
+        <div class="form-error" id="cf-error">Please fill in your name and email to continue.</div>
+        <div class="form-success" id="cf-success">
+          <div style="font-size:24px;margin-bottom:8px;">✅</div>
+          <p><strong>Message received!</strong><br/>We'll be in touch within one business day.</p>
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div>
+        <div class="contact-info-card">
+          <div class="ci-section">
+            <div class="ci-label">Office Address</div>
+            <div class="ci-text">Flat No. 3, Balvinder Appartments,<br/>Mayur Bagh CGHS, A-6,<br/>Paschim Vihar, New Delhi</div>
+          </div>
+          <div class="ci-section">
+            <div class="ci-label">Email</div>
+            <div class="ci-text"><a href="mailto:office@rlaca.com">office@rlaca.com</a></div>
+          </div>
+          <div class="ci-section">
+            <div class="ci-label">Phone</div>
+            <div class="ci-phones">
+              <a href="tel:+919899064815" class="ci-phone">+91 98990 64815</a>
+              <a href="tel:+919953587040" class="ci-phone">+91 99535 87040</a>
+            </div>
+          </div>
+          <div class="ci-section">
+            <div class="ci-label">Hours</div>
+            <div class="ci-text">Mon – Sat: 10:00 AM – 7:00 PM<br/>Sunday: By appointment</div>
+          </div>
+          <div class="ci-section">
+            <div class="ci-label">Free Consultation</div>
+            <div class="ci-text" style="color:rgba(247,244,238,0.7);">We offer a free 15-minute consultation to understand your needs. No obligation.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ──────────────── FOOTER ──────────────── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="name">Ruchi Luthra & Associates</div>
+      <div class="sub">Tax Consultancy · Compliances · Advisory</div>
+      <p>Professional tax consulting for individuals, startups and growing businesses across India. Based in New Delhi, serving clients nationwide and NRIs globally.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('services')">ITR Filing</a></li>
+        <li><a href="#" onclick="showPage('services')">GST</a></li>
+        <li><a href="#" onclick="showPage('services')">Compliances</a></li>
+        <li><a href="#" onclick="showPage('services')">Incorporation</a></li>
+        <li><a href="#" onclick="showPage('services')">Tax Advisory</a></li>
+        <li><a href="#" onclick="showPage('services')">Audits</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('home')">Home</a></li>
+        <li><a href="#" onclick="showPage('team')">Team</a></li>
+        <li><a href="#" onclick="showPage('process')">Process</a></li>
+        <li><a href="#" onclick="showPage('resources')">Resources</a></li>
+        <li><a href="#" onclick="showPage('faqs')">FAQs</a></li>
+        <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:office@rlaca.com">office@rlaca.com</a></li>
+        <li><a href="tel:+919899064815">+91 98990 64815</a></li>
+        <li><a href="tel:+919953587040">+91 99535 87040</a></li>
+      </ul>
+    </div>
   </div>
-</header>
-
-
-<main>
-
-  <!-- Hero Section -->
-<section class="hero">
-  <div class="hero-inner container">
-    <div class="hero-text">
-      <h1>Trusted Tax Consultancy for Your Growth</h1>
-      <p>We simplify tax, compliance, and advisory so you can focus on building your business.</p>
-      <a href="services.html" class="btn">Explore Services</a>
-    </div>
-
-    <div class="hero-img">
-      <img src="advice.png" alt="Tax consultation" />
-    </div>
-  </div>
-</section>
-
-
-  <!-- Popular Services -->
-  <section class="container">
-    <h2 class="section-title">Popular Services</h2>
-    <div class="grid grid-3">
-      <div class="card">
-        <h3>Income Tax Filing</h3>
-        <p>Quick and accurate ITR filing for individuals and businesses.</p>
-        <a href="services.html" class="btn">Read More</a>
-      </div>
-      <div class="card">
-        <h3>GST Compliance</h3>
-        <p>Ensure timely filing of GST returns with expert guidance.</p>
-        <a href="services.html" class="btn">Read More</a>
-      </div>
-      <div class="card">
-        <h3>Business Advisory</h3>
-        <p>Plan your business finances with strategic advisory solutions.</p>
-        <a href="services.html" class="btn">Read More</a>
-      </div>
-    </div>
-    <div class="center" style="margin-top:20px">
-      <a href="services.html" class="btn">See All Services</a>
-    </div>
-  </section>
-
-  <!-- Why Choose Us -->
-  <section class="highlight">
-    <div class="container grid grid-3">
-      <div class="highlight-card">
-        <h3>✔ Experienced Team</h3>
-        <p>Years of expertise in tax consultancy & compliance handling.</p>
-      </div>
-      <div class="highlight-card">
-        <h3>✔ Affordable Pricing</h3>
-        <p>Transparent and cost-effective solutions tailored for you.</p>
-      </div>
-      <div class="highlight-card">
-        <h3>✔ Reliable Support</h3>
-        <p>We stay connected with you for queries, notices, and updates.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Resources Preview -->
-  <section class="container">
-    <h2 class="section-title">Resources & Guides</h2>
-    <div class="grid grid-3">
-      <div class="card">
-        <h3>ITR Documents Checklist</h3>
-        <p>A quick guide to filing ITR in AY 2025–26.</p>
-        <a href="resources.html" class="btn">Read More</a>
-      </div>
-      <div class="card">
-        <h3>GST Deadlines</h3>
-        <p>Important due dates and penalty rules explained.</p>
-        <a href="resources.html" class="btn">Read More</a>
-      </div>
-      <div class="card">
-        <h3>Capital Gains Simplified</h3>
-        <p>Understand capital gains on stocks & property.</p>
-        <a href="resources.html" class="btn">Read More</a>
-      </div>
-    </div>
-    <div class="center" style="margin-top:20px">
-      <a href="resources.html" class="btn">See All Resources</a>
-    </div>
-  </section>
-
-</main>
-
-  <footer class="footer">
-  <div class="container">
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
-      <div style="max-width:520px">
-        <div style="font-weight:700">RUCHI LUTHRA & ASSOCIATES</div>
-        <small>Professional tax consulting for individuals, startups and growing businesses across India.</small>
-        <div style="margin-top:12px">Email: <a href="mailto:office@rlaca.com">office@rlaca.com</a> • Phone: +91-9899064815, 9953587040</div>
-      </div>
-      <div style="min-width:200px">
-        <div style="font-weight:700">Services</div>
-        <div><a href="services.html">ITR, GST, TDS, Incorporation</a></div>
-        <div style="margin-top:12px"><small>© 2025 Ruchi Luthra & Associates</small></div>
-      </div>
-    </div>
+  <div class="footer-bottom">
+    <span>© 2025 Ruchi Luthra & Associates. All rights reserved.</span>
+    <span>Made with care · New Delhi, India</span>
   </div>
 </footer>
 
-  <script src="script.js"></script>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ──────────────── EMAILJS INIT ────────────────
+(function() {
+  emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // Replace with your EmailJS public key
+})();
+
+// ──────────────── NAV ────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+});
+
+document.getElementById('mobileToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === name);
+  });
+  document.getElementById('navLinks').classList.remove('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  return false;
+}
+
+// ──────────────── FAQ TOGGLE ────────────────
+function toggleFaq(el) {
+  const ans = el.nextElementSibling;
+  const wasOpen = ans.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+  if (!wasOpen) {
+    ans.classList.add('open');
+    el.classList.add('open');
+  }
+}
+
+// ──────────────── TOAST ────────────────
+function showToast(msg, duration = 4000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+// ──────────────── CONTACT FORM ────────────────
+async function submitContactForm() {
+  const name    = document.getElementById('cf-name').value.trim();
+  const email   = document.getElementById('cf-email').value.trim();
+  const phone   = document.getElementById('cf-phone').value.trim();
+  const service = document.getElementById('cf-service').value;
+  const message = document.getElementById('cf-message').value.trim();
+  const errEl   = document.getElementById('cf-error');
+  const sucEl   = document.getElementById('cf-success');
+  const btn     = document.getElementById('cf-submit');
+
+  errEl.classList.remove('show');
+  sucEl.classList.remove('show');
+
+  if (!name || !email) {
+    errEl.classList.add('show');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  // EmailJS template params — set up a template in EmailJS with these variables
+  const templateParams = {
+    to_email: 'office@rlaca.com',
+    from_name: name,
+    from_email: email,
+    phone: phone || 'Not provided',
+    service: service || 'Not specified',
+    message: message || 'No message provided',
+    reply_to: email,
+  };
+
+  try {
+    // Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your EmailJS IDs
+    await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);
+    sucEl.classList.add('show');
+    showToast('✅ Message sent to office@rlaca.com!');
+    // Clear form
+    ['cf-name','cf-email','cf-phone','cf-message'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('cf-service').value = '';
+  } catch(err) {
+    errEl.textContent = 'Something went wrong. Please email us directly at office@rlaca.com';
+    errEl.classList.add('show');
+    console.error('EmailJS error:', err);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Send Message';
+}
+
+// ──────────────── SCROLL ANIMATIONS ────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.why-card, .service-card, .process-step, .resource-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
 </body>
 </html>
