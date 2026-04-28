@@ -113,14 +113,14 @@
   }
   .nav-links a:hover, .nav-links a.active { color: var(--ink); background: rgba(184,146,42,0.08); }
   .nav-cta {
-    background: var(--ink) !important; color: var(--gold) !important;
+    background: var(--gold-glow) !important; color: var(--gold) !important;
     border-radius: 4px !important; padding: 8px 18px !important;
     transition: background 0.2s !important;
   }
-  .nav-cta:hover { background: var(--charcoal) !important; }
+  .nav-cta:hover { background: var(--gold-pale) !important; }
 
   .nav-mobile-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
-  .nav-mobile-toggle span { display: block; width: 22px; height: 1.5px; background: var(--dark3); transition: 0.3s; }
+  .nav-mobile-toggle span { display: block; width: 22px; height: 1.5px; background: var(--ink); transition: 0.3s; }
 
   /* ──────────────── PAGE SECTIONS ──────────────── */
   .page { display: none; padding-top: 72px; min-height: 100vh; }
@@ -708,7 +708,7 @@
     .nav-links.open {
       display: flex; flex-direction: column;
       position: fixed; top: 72px; left: 0; right: 0;
-      background: rgba(247,244,238,0.97);
+      background: rgba(13, 16, 22, 0.97);
       backdrop-filter: blur(16px);
       padding: 16px 20px 24px;
       gap: 4px;
